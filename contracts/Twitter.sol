@@ -4,6 +4,14 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 pragma solidity ^0.8.10;
 
+interface IProfile {
+    struct UserProfile{
+        string displayName;
+        string bio;
+    }
+    function getProfile (address _user) external view returns (UserProfile memory);
+}
+
 contract Twitter is Ownable(msg.sender) {
     
     uint16 public MAX_TWEET_LENGTH = 300;
@@ -18,13 +26,22 @@ contract Twitter is Ownable(msg.sender) {
 
     mapping (address => Tweet[]) public tweets;
 
+    IProfile public profileContract;
 
+    constructor(address _profileContract){
+        profileContract = IProfile(_profileContract);
+    }
 
     event TweetCreated(uint256 id, address author, string content, uint256 timestamp);
 
     event TweetLiked(address liker, address tweetAuthor, uint256 tweetId, uint256 tweetLikeCount );
 
     event TweetUnliked(address unliker, address tweetAuthor, uint256 tweetId, uint256 newLikeCount);
+
+    modifier OnlyRegistered() {
+        IProfile.UserProfile memory userProfileTemp = profileContract.getProfile(msg.sender);
+        _;
+    }
 
     function createTweet(string memory _tweet) public  {
 
