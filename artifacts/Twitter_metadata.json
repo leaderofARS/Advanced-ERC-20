@@ -112,7 +112,7 @@
 					{
 						"indexed": false,
 						"internalType": "uint256",
-						"name": "tweetLikeCount",
+						"name": "newLikeCount",
 						"type": "uint256"
 					}
 				],
@@ -333,19 +333,6 @@
 			},
 			{
 				"inputs": [],
-				"name": "profileContract",
-				"outputs": [
-					{
-						"internalType": "contract IProfile",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
 				"name": "renounceOwnership",
 				"outputs": [],
 				"stateMutability": "nonpayable",
@@ -493,11 +480,11 @@
 			]
 		},
 		"contracts/Twitter.sol": {
-			"keccak256": "0x7d76a355fce6089dada27e6689c535c8deacd85c30cf45a42de55f48f4b1eb09",
+			"keccak256": "0x8986514be25d4e3aa1150237072d960951c86b6aa3a9b49b5d8ad61bd8e59697",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://83525b08b877af5ef3fc2ea9843419943fa0bfe524f6311e784ce7c161f42f89",
-				"dweb:/ipfs/QmXo4xMoVJBtWoFgZbFkAtU5kvFKNvB4uxsfrUCyJdgVzU"
+				"bzz-raw://caea6a25cb26dde7d84e01ba1ca45624263519e537dc7af459bacd909a43949e",
+				"dweb:/ipfs/QmcTvj5CMjHTFJgWthHDJGZZZTQkDmCeVv734jv58nfHLe"
 			]
 		}
 	},
