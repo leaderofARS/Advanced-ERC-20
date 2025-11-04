@@ -1,0 +1,145 @@
+# Node modules
+node_modules/
+Advanced-ERC-20/node_modules/
+
+# Hardhat artifacts and cache
+artifacts/
+cache/
+Advanced-ERC-20/artifacts/
+Advanced-ERC-20/cache/
+
+# Build info
+build-info/
+Advanced-ERC-20/build-info/
+
+# TypeScript build output
+dist/
+Advanced-ERC-20/dist/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Environment files
+.env
+.env.*
+
+# VSCode settings
+.vscode/
+
+# Coverage reports
+coverage/
+Advanced-ERC-20/coverage/
+.nyc_output/
+
+# Mac/Windows system files
+.DS_Store
+Thumbs.db
+
+# Local config and secrets
+config/networks.json
+
+# Compiled JS/TS files
+*.tsbuildinfo
+*.js
+*.js.map
+*.d.ts
+
+# IDE/project files
+.idea/
+*.sublime-workspace
+*.sublime-project
+*.sw?
+*.swo
+*.swn
+*.tmp
+*.bak
+*.old
+*.orig
+*.rej
+*.kate-swp
+*.komodoproject
+*.tmproj
+*.project
+*.cproject
+*.classpath
+*.settings/
+*.launch
+*.pydevproject
+.history/
+
+# OS/Editor swap and temp files
+*.swp
+*.swx
+
+# Yarn/PNPM/Other lock files (if not used)
+yarn.lock
+pnpm-lock.yaml
+
+# Output folders for various frameworks
+.svelte-kit/
+.next/
+out/
+.nuxt/
+.cargo/
+target/
+
+# Python cache (if any)
+__pycache__/
+*.pyc
+
+# Future-proof: ignore any build, cache, or output folders
+**/build/
+**/cache/
+**/output/
+**/out/
+**/dist/
+**/.cache/
+**/.output/
+
+# Ignore all test coverage temp files
+coverage-final.json
+
+# Ignore all test snapshots
+__snapshots__/
+
+# Ignore all test results
+junit.xml
+
+# Ignore all user-specific files
+*.user
+*.local
+
+# Ignore all backup files
+*~
+
+# Ignore all log files
+*.log*
+
+# Ignore all lock files
+*.lock
+
+# Ignore all package manager state files
+.pnp/
+.pnp.js
+
+# Ignore all future IDE/project files
+*.iml
+*.ipr
+*.iws
+
+# Ignore all future system files
+Icon?
+
+# Ignore all future environment files
+.env.*
+
+# Ignore all future build artifacts
+**/artifacts/
+**/build-info/
+
+# Ignore all future node_modules
+**/node_modules/
