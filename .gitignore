@@ -1,145 +1,509 @@
-# Node modules
+# ===================================
+# DEPENDENCIES & PACKAGE MANAGERS
+# ===================================
 node_modules/
-Advanced-ERC-20/node_modules/
+.pnp/
+.pnp.js
+.yarn/
+.npm/
+.pnpm-store/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+shrinkwrap.yaml
 
-# Hardhat artifacts and cache
+# ===================================
+# BUILD OUTPUTS & ARTIFACTS
+# ===================================
+build/
+dist/
+out/
 artifacts/
 cache/
-Advanced-ERC-20/artifacts/
-Advanced-ERC-20/cache/
-
-# Build info
 build-info/
-Advanced-ERC-20/build-info/
+typechain/
+typechain-types/
+.next/
+.nuxt/
+.svelte-kit/
+.output/
+.cache/
+.temp/
+.tmp/
 
-# TypeScript build output
-dist/
-Advanced-ERC-20/dist/
+# ===================================
+# ENVIRONMENT & SECRETS
+# ===================================
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+secrets/
+private/
+config/local.json
+config/production.json
+config/staging.json
+config/networks.json
+mnemonic.txt
+seed.txt
 
-# Logs
+# ===================================
+# HARDHAT & BLOCKCHAIN
+# ===================================
+deployments/localhost/
+deployments/hardhat/
+deployments/ganache/
+ignition/deployments/
+broadcast/
+script/
+lib/
+.deps/
+.openzeppelin/
+.slither/
+.mythril/
+.echidna/
+.manticore/
+
+# ===================================
+# TESTING & COVERAGE
+# ===================================
+coverage/
+coverage.json
+.coverage_artifacts/
+.coverage_cache/
+.coverage_contracts/
+.nyc_output/
+junit.xml
+test-results/
+test-reports/
+__snapshots__/
+coverage-final.json
+gas-report.txt
+*.lcov
+
+# ===================================
+# LOGS & DEBUG FILES
+# ===================================
+logs/
 *.log
+*.log.*
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
+.pnpm-debug.log*
+debug.log
+error.log
+combined.log
 
-# Environment files
-.env
-.env.*
-
-# VSCode settings
+# ===================================
+# IDE & EDITOR FILES
+# ===================================
 .vscode/
-
-# Coverage reports
-coverage/
-Advanced-ERC-20/coverage/
-.nyc_output/
-
-# Mac/Windows system files
-.DS_Store
-Thumbs.db
-
-# Local config and secrets
-config/networks.json
-
-# Compiled JS/TS files
-*.tsbuildinfo
-*.js
-*.js.map
-*.d.ts
-
-# IDE/project files
 .idea/
 *.sublime-workspace
 *.sublime-project
-*.sw?
+*.iml
+*.ipr
+*.iws
+.project
+.cproject
+.classpath
+.settings/
+.launch
+.pydevproject
+.history/
+.komodoproject
+.tmproj
+
+# ===================================
+# OS GENERATED FILES
+# ===================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Icon?
+desktop.ini
+$RECYCLE.BIN/
+
+# ===================================
+# TEMPORARY & SWAP FILES
+# ===================================
+*.tmp
+*.temp
+*.swp
 *.swo
 *.swn
-*.tmp
+*.swx
+*.kate-swp
+*~
+*.backup
 *.bak
 *.old
 *.orig
 *.rej
-*.kate-swp
-*.komodoproject
-*.tmproj
-*.project
-*.cproject
-*.classpath
-*.settings/
-*.launch
-*.pydevproject
-.history/
 
-# OS/Editor swap and temp files
-*.swp
-*.swx
-
-# Yarn/PNPM/Other lock files (if not used)
-yarn.lock
-pnpm-lock.yaml
-
-# Output folders for various frameworks
-.svelte-kit/
-.next/
-out/
-.nuxt/
-.cargo/
-target/
-
-# Python cache (if any)
-__pycache__/
+# ===================================
+# COMPILED & GENERATED FILES
+# ===================================
+*.tsbuildinfo
+*.js.map
+*.d.ts
 *.pyc
+__pycache__/
+*.class
+*.jar
+*.war
+*.ear
 
-# Future-proof: ignore any build, cache, or output folders
-**/build/
-**/cache/
-**/output/
-**/out/
-**/dist/
-**/.cache/
-**/.output/
+# ===================================
+# ANALYTICS & DATA
+# ===================================
+analytics/data/
+analytics/logs/
+analytics/cache/
+*.analytics
+metrics/
+events/
+*.db
+*.sqlite
+*.sqlite3
 
-# Ignore all test coverage temp files
-coverage-final.json
+# ===================================
+# DOCUMENTATION BUILDS
+# ===================================
+docs/build/
+docs/.vuepress/dist/
+site/
+_site/
+.jekyll-cache/
+.docusaurus/
 
-# Ignore all test snapshots
-__snapshots__/
+# ===================================
+# SECURITY & AUDIT FILES
+# ===================================
+audits/private/
+security/
+vulnerabilities/
+*.audit
+*.security
 
-# Ignore all test results
-junit.xml
+# ===================================
+# DEPLOYMENT & PRODUCTION
+# ===================================
+.vercel/
+.netlify/
+.serverless/
+.fusebox/
+.dynamodb/
+.tern-port
 
-# Ignore all user-specific files
+# ===================================
+# USER SPECIFIC & LOCAL
+# ===================================
 *.user
 *.local
+.local/
+local/
+my-*
+personal-*
 
-# Ignore all backup files
-*~
+# ===================================
+# FUTURE PROOFING & ADD-ONS
+# ===================================
 
-# Ignore all log files
-*.log*
-
-# Ignore all lock files
-*.lock
-
-# Ignore all package manager state files
-.pnp/
-.pnp.js
-
-# Ignore all future IDE/project files
-*.iml
-*.ipr
-*.iws
-
-# Ignore all future system files
-Icon?
-
-# Ignore all future environment files
-.env.*
-
-# Ignore all future build artifacts
-**/artifacts/
-**/build-info/
-
-# Ignore all future node_modules
+# Nested directory patterns (any depth)
 **/node_modules/
+**/build/
+**/dist/
+**/cache/
+**/artifacts/
+**/coverage/
+**/logs/
+**/temp/
+**/tmp/
+**/.env
+**/.env.*
+**/*.log
+**/*.tmp
+**/*.backup
+**/*.bak
+**/*.old
+**/*.orig
+**/*.swp
+**/*.swo
+**/*.key
+**/*.pem
+**/*.p12
+**/*.pfx
+
+# Future package managers & tools
+.bun/
+bun.lockb
+.deno/
+deno.lock
+.rush/
+.lerna/
+.nx/
+nx.json
+.turbo/
+.parcel-cache/
+.rollup.cache/
+.webpack/
+.vite/
+vite.config.*.timestamp-*
+
+# Future blockchain tools & frameworks
+.foundry/
+foundry.toml
+.brownie/
+.ape/
+.vyper/
+.cairo/
+.starknet/
+.polygon/
+.arbitrum/
+.optimism/
+.avalanche/
+.solana/
+.near/
+.cosmos/
+.polkadot/
+.chainlink/
+.graph/
+.ipfs/
+
+# Future testing frameworks
+.jest/
+.mocha/
+.cypress/
+.playwright/
+.puppeteer/
+.webdriver/
+test-*
+*-test/
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+e2e/
+integration/
+fixtures/
+
+# Future development servers & hot reload
+.dev/
+.hot/
+.hmr/
+.live/
+.watch/
+.reload/
+hot-update.*
+*.hot-update.*
+
+# Future cloud & deployment platforms
+.aws/
+.gcp/
+.azure/
+.heroku/
+.railway/
+.render/
+.fly/
+.deta/
+.supabase/
+.planetscale/
+.neon/
+.upstash/
+.cloudflare/
+.fastly/
+
+# Future AI & ML tools
+.ai/
+.ml/
+.tensorflow/
+.pytorch/
+.huggingface/
+.openai/
+.anthropic/
+models/
+weights/
+checkpoints/
+*.model
+*.weights
+*.checkpoint
+
+# Future monitoring & analytics
+.sentry/
+.datadog/
+.newrelic/
+.bugsnag/
+.rollbar/
+.amplitude/
+.mixpanel/
+.segment/
+telemetry/
+monitoring/
+observability/
+
+# Future database & storage
+.redis/
+.mongodb/
+.postgres/
+.mysql/
+.sqlite/
+.cassandra/
+.elasticsearch/
+.clickhouse/
+.influxdb/
+.timescale/
+migrations/
+seeds/
+dumps/
+backups/
+
+# Future containerization & orchestration
+.docker/
+.podman/
+.kubernetes/
+.k8s/
+.helm/
+.skaffold/
+.tilt/
+docker-compose.override.yml
+docker-compose.local.yml
+Dockerfile.local
+.dockerignore.local
+
+# Future security & compliance
+.vault/
+.consul/
+.terraform/
+.ansible/
+.chef/
+.puppet/
+compliance/
+policies/
+rbac/
+*.crt
+*.csr
+*.ca-bundle
+*.ca-cert
+
+# Future mobile & cross-platform
+.expo/
+.react-native/
+.flutter/
+.xamarin/
+.cordova/
+.phonegap/
+.ionic/
+.capacitor/
+.tauri/
+.electron/
+
+# Future web frameworks & meta-frameworks
+.astro/
+.remix/
+.qwik/
+.solid/
+.fresh/
+.hydrogen/
+.redwood/
+.blitz/
+.t3/
+.create-*
+
+# Future file extensions & formats
+*.wasm
+*.wat
+*.bc
+*.ll
+*.o
+*.so
+*.dll
+*.dylib
+*.a
+*.lib
+*.exe
+*.msi
+*.dmg
+*.pkg
+*.deb
+*.rpm
+*.snap
+*.appimage
+*.flatpak
+
+# Future configuration formats
+*.toml.local
+*.yaml.local
+*.yml.local
+*.json.local
+*.ini.local
+*.cfg.local
+*.conf.local
+*.config.local
+*-local.*
+*_local.*
+*.development
+*.staging
+*.production
+*.test
+
+# Future temporary & cache patterns
+.cache-*
+.temp-*
+.tmp-*
+cache-*
+temp-*
+tmp-*
+*-cache/
+*-temp/
+*-tmp/
+*.cache
+*.temp
+*.tmp
+
+# Future backup & versioning patterns
+*.v[0-9]*
+*.backup.[0-9]*
+*.bak.[0-9]*
+*-backup-*
+*-bak-*
+*-old-*
+*-prev-*
+*-previous-*
+*.save
+*.saved
+
+# Future user & machine specific
+*-local
+*_local
+*.local.*
+*-$(USER)
+*-$(HOSTNAME)
+*-$(COMPUTERNAME)
+my-*
+personal-*
+private-*
+secret-*
+confidential-*
+
+# Future wildcard safety nets
+**/.git/
+**/.svn/
+**/.hg/
+**/.bzr/
+**/CVS/
+**/*.secret
+**/*.private
+**/*.confidential
+**/*-secret*
+**/*-private*
+**/*-confidential*
