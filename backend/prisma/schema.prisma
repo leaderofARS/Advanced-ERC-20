@@ -1,0 +1,216 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(cuid())
+  address     String   @unique
+  email       String?  @unique
+  username    String?  @unique
+  avatar      String?
+  bio         String?
+  isVerified  Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  roles       Role[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  transactions    Transaction[]
+  proposals       Proposal[]
+  votes           Vote[]
+  notifications   Notification[]
+  analytics       UserAnalytics[]
+  sessions        Session[]
+
+  @@map("users")
+}
+
+model Role {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  permissions String[] // JSON array of permissions
+  users       User[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("roles")
+}
+
+model Transaction {
+  id              String            @id @default(cuid())
+  hash            String            @unique
+  from            String
+  to              String?
+  amount          String
+  type            TransactionType
+  status          TransactionStatus @default(PENDING)
+  blockNumber     BigInt?
+  gasUsed         String?
+  gasPrice        String?
+  fee             String?
+  metadata        Json?
+  userId          String?
+  user            User?             @relation(fields: [userId], references: [id])
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  @@map("transactions")
+}
+
+model Proposal {
+  id          String         @id @default(cuid())
+  title       String
+  description String
+  proposer    String
+  status      ProposalStatus @default(ACTIVE)
+  startTime   DateTime
+  endTime     DateTime
+  votesFor    String         @default("0")
+  votesAgainst String        @default("0")
+  totalVotes  String         @default("0")
+  executed    Boolean        @default(false)
+  metadata    Json?
+  userId      String?
+  user        User?          @relation(fields: [userId], references: [id])
+  votes       Vote[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@map("proposals")
+}
+
+model Vote {
+  id         String   @id @default(cuid())
+  proposalId String
+  voter      String
+  support    Boolean  // true = for, false = against
+  weight     String   // voting power
+  reason     String?
+  proposal   Proposal @relation(fields: [proposalId], references: [id])
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id])
+  createdAt  DateTime @default(now())
+
+  @@unique([proposalId, voter])
+  @@map("votes")
+}
+
+model TokenMetrics {
+  id              String   @id @default(cuid())
+  totalSupply     String
+  circulatingSupply String
+  burnedTokens    String
+  holders         Int
+  transfers24h    Int
+  volume24h       String
+  marketCap       String?
+  price           String?
+  priceChange24h  Float?
+  timestamp       DateTime @default(now())
+
+  @@map("token_metrics")
+}
+
+model UserAnalytics {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  totalTransactions Int    @default(0)
+  totalVolume     String   @default("0")
+  firstTransaction DateTime?
+  lastTransaction DateTime?
+  favoriteAction  String?
+  metadata        Json?
+  updatedAt       DateTime @updatedAt
+
+  @@unique([userId])
+  @@map("user_analytics")
+}
+
+model Notification {
+  id        String             @id @default(cuid())
+  userId    String
+  user      User               @relation(fields: [userId], references: [id])
+  type      NotificationType
+  title     String
+  message   String
+  data      Json?
+  read      Boolean            @default(false)
+  createdAt DateTime           @default(now())
+
+  @@map("notifications")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@map("sessions")
+}
+
+model SystemConfig {
+  id    String @id @default(cuid())
+  key   String @unique
+  value Json
+  updatedAt DateTime @updatedAt
+
+  @@map("system_config")
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  action    String
+  actor     String
+  target    String?
+  metadata  Json?
+  timestamp DateTime @default(now())
+
+  @@map("audit_logs")
+}
+
+enum TransactionType {
+  TRANSFER
+  MINT
+  BURN
+  APPROVE
+  GOVERNANCE
+  STAKE
+  UNSTAKE
+}
+
+enum TransactionStatus {
+  PENDING
+  CONFIRMED
+  FAILED
+  CANCELLED
+}
+
+enum ProposalStatus {
+  ACTIVE
+  SUCCEEDED
+  DEFEATED
+  CANCELLED
+  EXECUTED
+}
+
+enum NotificationType {
+  TRANSACTION
+  GOVERNANCE
+  SYSTEM
+  SECURITY
+  MARKETING
+}
