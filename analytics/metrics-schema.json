@@ -1,0 +1,184 @@
+{
+  "schema_version": "1.0.0",
+  "metrics": {
+    "transfer_metrics": {
+      "fields": [
+        {
+          "name": "timestamp",
+          "type": "datetime",
+          "description": "Transaction timestamp"
+        },
+        {
+          "name": "from_address",
+          "type": "string",
+          "description": "Sender address"
+        },
+        {
+          "name": "to_address",
+          "type": "string",
+          "description": "Recipient address"
+        },
+        {
+          "name": "amount",
+          "type": "bigint",
+          "description": "Transfer amount in wei"
+        },
+        {
+          "name": "fee_amount",
+          "type": "bigint",
+          "description": "Fee collected in wei"
+        },
+        {
+          "name": "category",
+          "type": "string",
+          "description": "Transfer category (STANDARD, FEE, MINT, BURN)"
+        },
+        {
+          "name": "block_number",
+          "type": "integer",
+          "description": "Block number"
+        },
+        {
+          "name": "transaction_hash",
+          "type": "string",
+          "description": "Transaction hash"
+        }
+      ],
+      "indexes": ["timestamp", "from_address", "to_address", "category"]
+    },
+    "user_metrics": {
+      "fields": [
+        {
+          "name": "user_address",
+          "type": "string",
+          "description": "User wallet address"
+        },
+        {
+          "name": "action",
+          "type": "string",
+          "description": "User action (transfer_in, transfer_out, mint, burn)"
+        },
+        {
+          "name": "value",
+          "type": "bigint",
+          "description": "Action value in wei"
+        },
+        {
+          "name": "timestamp",
+          "type": "datetime",
+          "description": "Action timestamp"
+        },
+        {
+          "name": "transaction_count",
+          "type": "integer",
+          "description": "Total transaction count for user"
+        },
+        {
+          "name": "total_volume",
+          "type": "bigint",
+          "description": "Total volume for user in wei"
+        }
+      ],
+      "indexes": ["user_address", "timestamp", "action"]
+    },
+    "supply_metrics": {
+      "fields": [
+        {
+          "name": "timestamp",
+          "type": "datetime",
+          "description": "Measurement timestamp"
+        },
+        {
+          "name": "total_supply",
+          "type": "bigint",
+          "description": "Total token supply in wei"
+        },
+        {
+          "name": "max_supply",
+          "type": "bigint",
+          "description": "Maximum token supply in wei"
+        },
+        {
+          "name": "burned_amount",
+          "type": "bigint",
+          "description": "Total burned tokens in wei"
+        },
+        {
+          "name": "minted_amount",
+          "type": "bigint",
+          "description": "Total minted tokens in wei"
+        },
+        {
+          "name": "holder_count",
+          "type": "integer",
+          "description": "Number of token holders"
+        }
+      ],
+      "indexes": ["timestamp"]
+    },
+    "governance_metrics": {
+      "fields": [
+        {
+          "name": "proposal_id",
+          "type": "integer",
+          "description": "Proposal identifier"
+        },
+        {
+          "name": "proposer",
+          "type": "string",
+          "description": "Proposal creator address"
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "description": "Proposal description"
+        },
+        {
+          "name": "votes_for",
+          "type": "bigint",
+          "description": "Votes in favor"
+        },
+        {
+          "name": "votes_against",
+          "type": "bigint",
+          "description": "Votes against"
+        },
+        {
+          "name": "start_time",
+          "type": "datetime",
+          "description": "Voting start time"
+        },
+        {
+          "name": "end_time",
+          "type": "datetime",
+          "description": "Voting end time"
+        },
+        {
+          "name": "executed",
+          "type": "boolean",
+          "description": "Whether proposal was executed"
+        }
+      ],
+      "indexes": ["proposal_id", "start_time", "executed"]
+    }
+  },
+  "aggregations": {
+    "daily_volume": {
+      "source": "transfer_metrics",
+      "group_by": "DATE(timestamp)",
+      "aggregates": {
+        "total_volume": "SUM(amount)",
+        "transaction_count": "COUNT(*)",
+        "unique_users": "COUNT(DISTINCT from_address)"
+      }
+    },
+    "hourly_activity": {
+      "source": "user_metrics",
+      "group_by": "DATE_TRUNC('hour', timestamp)",
+      "aggregates": {
+        "active_users": "COUNT(DISTINCT user_address)",
+        "total_actions": "COUNT(*)"
+      }
+    }
+  }
+}

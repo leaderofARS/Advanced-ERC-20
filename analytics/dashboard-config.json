@@ -1,0 +1,73 @@
+{
+  "dashboard": {
+    "title": "Advanced ERC-20 Analytics",
+    "refreshInterval": 30000,
+    "charts": [
+      {
+        "id": "total-supply",
+        "type": "line",
+        "title": "Total Supply Over Time",
+        "dataSource": "supply_metrics",
+        "yAxis": "Total Supply",
+        "timeframe": "24h"
+      },
+      {
+        "id": "transfer-volume",
+        "type": "bar",
+        "title": "Daily Transfer Volume",
+        "dataSource": "transfer_metrics",
+        "yAxis": "Volume",
+        "timeframe": "7d"
+      },
+      {
+        "id": "fee-collection",
+        "type": "area",
+        "title": "Fee Collection & Burns",
+        "dataSource": "fee_metrics",
+        "yAxis": "Amount",
+        "timeframe": "30d"
+      },
+      {
+        "id": "user-activity",
+        "type": "heatmap",
+        "title": "User Activity Heatmap",
+        "dataSource": "user_metrics",
+        "timeframe": "7d"
+      }
+    ],
+    "metrics": [
+      {
+        "id": "total-holders",
+        "title": "Total Holders",
+        "type": "counter",
+        "dataSource": "holder_count"
+      },
+      {
+        "id": "burn-rate",
+        "title": "Current Burn Rate",
+        "type": "percentage",
+        "dataSource": "burn_rate"
+      },
+      {
+        "id": "transfer-fee",
+        "title": "Transfer Fee",
+        "type": "percentage",
+        "dataSource": "transfer_fee"
+      }
+    ]
+  },
+  "alerts": [
+    {
+      "id": "high-volume",
+      "condition": "transfer_volume > 100000",
+      "message": "High transfer volume detected",
+      "severity": "info"
+    },
+    {
+      "id": "pause-event",
+      "condition": "contract_paused == true",
+      "message": "Contract has been paused",
+      "severity": "warning"
+    }
+  ]
+}
