@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
-import ParticlesBackground from '@/components/ui/ParticlesBackground';
+import SimpleParticles from '@/components/ui/SimpleParticles';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -38,7 +38,7 @@ export default function RootLayout({
         <ErrorBoundary>
           <Providers>
             {/* Animated Particles Background */}
-            <ParticlesBackground />
+            <SimpleParticles />
 
             {/* Background Effects */}
             <div className="fixed inset-0 cyber-grid opacity-10 pointer-events-none" style={{ zIndex: 1 }} />
