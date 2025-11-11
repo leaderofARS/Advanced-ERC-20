@@ -83,14 +83,14 @@ contract FeeMechanism is ERC20MintBurn, IFeeMechanism {
 
             if (burnAmount > 0) {
                 super._transfer(from, address(0), burnAmount);
-                Events.TokensBurned(from, burnAmount, "Transfer fee burn");
+                emit Events.TokensBurned(from, burnAmount, "Transfer fee burn");
             }
 
             if (treasuryAmount > 0) {
                 super._transfer(from, _treasury, treasuryAmount);
             }
 
-            Events.FeeCollected(from, to, amount, feeAmount);
+            emit Events.FeeCollected(from, to, amount, feeAmount);
         }
 
         super._transfer(from, to, transferAmount);

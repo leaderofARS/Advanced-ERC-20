@@ -59,7 +59,7 @@ contract Governance is ComplianceLayer {
         proposal.executed = false;
 
         emit ProposalCreated(proposalId, _msgSender(), description);
-        Events.ProposalCreated(proposalId, _msgSender(), description);
+        emit Events.ProposalCreated(proposalId, _msgSender(), description);
         
         return proposalId;
     }
@@ -95,7 +95,7 @@ contract Governance is ComplianceLayer {
         proposal.executed = true;
 
         emit ProposalExecuted(proposalId, success);
-        Events.ProposalExecuted(proposalId, success);
+        emit Events.ProposalExecuted(proposalId, success);
     }
 
     function getProposal(uint256 proposalId) external view returns (

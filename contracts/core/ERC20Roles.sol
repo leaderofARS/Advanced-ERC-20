@@ -30,7 +30,7 @@ contract ERC20Roles is Context, IAccessControl {
         _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
     }
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public view virtual returns (bool) {
         return interfaceId == type(IAccessControl).interfaceId;
     }
 

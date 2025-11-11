@@ -61,18 +61,18 @@ contract ComplianceLayer is FeeMechanism, ICompliance {
     function _transfer(address from, address to, uint256 amount) internal virtual override {
         // Check blacklist
         if (_blacklisted[from]) {
-            Events.TransferBlocked(from, to, amount, "Sender blacklisted");
+            emit Events.TransferBlocked(from, to, amount, "Sender blacklisted");
             revert("ComplianceLayer: sender is blacklisted");
         }
         
         if (_blacklisted[to]) {
-            Events.TransferBlocked(from, to, amount, "Recipient blacklisted");
+            emit Events.TransferBlocked(from, to, amount, "Recipient blacklisted");
             revert("ComplianceLayer: recipient is blacklisted");
         }
 
         // Check transfer limits
         if (_transferLimit > 0 && amount > _transferLimit) {
-            Events.TransferBlocked(from, to, amount, "Amount exceeds limit");
+            emit Events.TransferBlocked(from, to, amount, "Amount exceeds limit");
             revert("ComplianceLayer: transfer amount exceeds limit");
         }
 

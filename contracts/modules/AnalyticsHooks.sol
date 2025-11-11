@@ -72,13 +72,13 @@ contract AnalyticsHooks is Governance {
         categoryVolume[category] += amount;
 
         // Emit analytics events
-        Events.TransferAnalytics(from, to, amount, block.timestamp, category);
+        emit Events.TransferAnalytics(from, to, amount, block.timestamp, category);
         
         if (from != address(0)) {
-            Events.UserActivity(from, "transfer_out", amount, block.timestamp);
+            emit Events.UserActivity(from, "transfer_out", amount, block.timestamp);
         }
         if (to != address(0)) {
-            Events.UserActivity(to, "transfer_in", amount, block.timestamp);
+            emit Events.UserActivity(to, "transfer_in", amount, block.timestamp);
         }
     }
 
