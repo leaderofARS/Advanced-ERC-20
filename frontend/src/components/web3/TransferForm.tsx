@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { useAccount, useContractWrite, usePrepareContractWrite } from 'wagmi';
+import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import { parseEther } from 'viem';
 import { toast } from 'react-hot-toast';
 import { Card } from '@/components/ui/Card';
@@ -33,26 +33,19 @@ export function TransferForm() {
   const [amount, setAmount] = useState('');
   const { address, isConnected } = useAccount();
 
-  // Prepare contract write
-  const { config } = usePrepareContractWrite({
-    address: CONTRACT_ADDRESS,
-    abi: tokenABI,
-    functionName: 'transfer',
-    args: recipient && amount ? [recipient as `0x${string}`, parseEther(amount)] : undefined,
-    enabled: !!recipient && !!amount && !!CONTRACT_ADDRESS,
+  const { data: hash, writeContract, isPending } = useWriteContract();
+
+  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
+    hash,
   });
 
-  const { write, isLoading } = useContractWrite({
-    ...config,
-    onSuccess: (data) => {
-      toast.success('Transfer initiated successfully!');
+  React.useEffect(() => {
+    if (isSuccess) {
+      toast.success('Transfer completed successfully!');
       setRecipient('');
       setAmount('');
-    },
-    onError: (error) => {
-      toast.error('Transfer failed: ' + error.message);
-    },
-  });
+    }
+  }, [isSuccess]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,7 +65,16 @@ export function TransferForm() {
       return;
     }
 
-    write?.();
+    try {
+      writeContract({
+        address: CONTRACT_ADDRESS,
+        abi: tokenABI,
+        functionName: 'transfer',
+        args: [recipient as `0x${string}`, parseEther(amount)],
+      });
+    } catch (error: any) {
+      toast.error('Transfer failed: ' + error.message);
+    }
   };
 
   if (!isConnected) {
@@ -147,10 +149,10 @@ export function TransferForm() {
           <Button
             type="submit"
             className="w-full"
-            loading={isLoading}
-            disabled={!recipient || !amount || isLoading}
+            loading={isPending || isConfirming}
+            disabled={!recipient || !amount || isPending || isConfirming}
           >
-            {isLoading ? 'Processing...' : 'Send Tokens'}
+            {isPending ? 'Confirming...' : isConfirming ? 'Processing...' : 'Send Tokens'}
           </Button>
         </form>
 

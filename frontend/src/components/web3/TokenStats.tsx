@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useAccount, useContractRead } from 'wagmi';
+import { useAccount, useReadContract } from 'wagmi';
 import { Card } from '@/components/ui/Card';
 import { formatEther } from 'viem';
 
@@ -44,33 +44,41 @@ export function TokenStats() {
   const { address, isConnected } = useAccount();
 
   // Contract reads
-  const { data: totalSupply } = useContractRead({
+  const { data: totalSupply } = useReadContract({
     address: CONTRACT_ADDRESS,
     abi: tokenABI,
     functionName: 'totalSupply',
-    enabled: !!CONTRACT_ADDRESS,
+    query: {
+      enabled: !!CONTRACT_ADDRESS,
+    },
   });
 
-  const { data: balance } = useContractRead({
+  const { data: balance } = useReadContract({
     address: CONTRACT_ADDRESS,
     abi: tokenABI,
     functionName: 'balanceOf',
     args: address ? [address] : undefined,
-    enabled: !!CONTRACT_ADDRESS && !!address,
+    query: {
+      enabled: !!CONTRACT_ADDRESS && !!address,
+    },
   });
 
-  const { data: tokenName } = useContractRead({
+  const { data: tokenName } = useReadContract({
     address: CONTRACT_ADDRESS,
     abi: tokenABI,
     functionName: 'name',
-    enabled: !!CONTRACT_ADDRESS,
+    query: {
+      enabled: !!CONTRACT_ADDRESS,
+    },
   });
 
-  const { data: tokenSymbol } = useContractRead({
+  const { data: tokenSymbol } = useReadContract({
     address: CONTRACT_ADDRESS,
     abi: tokenABI,
     functionName: 'symbol',
-    enabled: !!CONTRACT_ADDRESS,
+    query: {
+      enabled: !!CONTRACT_ADDRESS,
+    },
   });
 
   if (!isConnected) {
