@@ -37,4 +37,4 @@ export async function rateLimiterMiddleware(
   }
 }
 
-export const rateLimiter = rateLimiterMiddleware;
+export default rateLimiterMiddleware;

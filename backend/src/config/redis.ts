@@ -4,9 +4,12 @@ import { logger } from '@/utils/logger';
 const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
 
 export const redis = new Redis(redisUrl, {
-  retryDelayOnFailover: 100,
   enableReadyCheck: false,
   maxRetriesPerRequest: null,
+  retryStrategy: (times) => {
+    const delay = Math.min(times * 50, 2000);
+    return delay;
+  },
 });
 
 redis.on('connect', () => {

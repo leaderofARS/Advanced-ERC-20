@@ -143,7 +143,7 @@ class WebSocketService {
   private async verifySignature(address: string, signature: string): Promise<boolean> {
     // Implement proper signature verification
     // This is a simplified version - in production, verify the signature properly
-    return signature && signature.length > 0;
+    return Boolean(signature && signature.length > 0);
   }
 
   private startHeartbeat() {
