@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build:contracts && cd frontend && npm install && npm run build",
+  "outputDirectory": "frontend/.next",
+  "framework": "nextjs",
+  "installCommand": "npm install",
+  "devCommand": "cd frontend && npm run dev",
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD ./frontend",
+  "regions": ["iad1"],
+  "env": {
+    "NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID": "@walletconnect_project_id",
+    "NEXT_PUBLIC_ALCHEMY_API_KEY": "@alchemy_api_key",
+    "NEXT_PUBLIC_INFURA_API_KEY": "@infura_api_key"
+  }
+}
