@@ -19,7 +19,7 @@ jobs:
 
       - name: Check for .env files
         run: |
-          if git ls-files | grep -E "\.env$|\.env\.local$|\.env\.production$"; then
+          if git ls-files | grep -E "\.env$|\.env\.local$|\.env\.production$|\.env\.example$"; then
             echo "❌ ERROR: .env files found in repository!"
             echo "These files should not be committed."
             exit 1
