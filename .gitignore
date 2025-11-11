@@ -111,7 +111,7 @@ deployments/ganache/
 ignition/deployments/
 broadcast/
 script/
-lib/
+/lib/
 .deps/
 .openzeppelin/
 .slither/
