@@ -2,8 +2,6 @@
 
 A comprehensive, production-ready full-stack platform for advanced ERC-20 token management with enterprise-grade features including governance, analytics, role management, and real-time monitoring.
 
-> **⚠️ Security Notice**: This is a development template. Always use secure environment variables, private keys, and API keys in production. Never commit sensitive information to version control.
-
 ## 🌟 Platform Overview
 
 ### 🎯 **What This Platform Provides**
@@ -34,7 +32,7 @@ A comprehensive, production-ready full-stack platform for advanced ERC-20 token 
 ### 1. Setup Platform
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/leaderofARS/Advanced-ERC-20.git
 cd Advanced-ERC-20
 
 # Run automated setup (handles dependencies and configuration)
@@ -358,19 +356,19 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🎯 Roadmap & Future Development
 
-### **Short-term Goals (Next 3 months)**
+### **Short-termm**
 - [ ] **Multi-chain Support**: Expand to Polygon, Arbitrum, Optimism
 - [ ] **Mobile Application**: React Native mobile app development
 - [ ] **Advanced Analytics**: Machine learning insights and predictions
 - [ ] **Performance Optimization**: Enhanced caching and optimization
 
-### **Medium-term Goals (3-12 months)**
+### **Medium-term**
 - [ ] **DeFi Integration**: Yield farming and staking features
 - [ ] **Enterprise Features**: Advanced compliance and reporting tools
 - [ ] **API Marketplace**: Third-party integrations and plugins
 - [ ] **Global Deployment**: Multi-region infrastructure
 
-### **Long-term Vision (1+ years)**
+### **Long-term**
 - [ ] **Institutional Features**: Enterprise-grade institutional tools
 - [ ] **Cross-chain Interoperability**: Seamless multi-chain operations
 - [ ] **AI-Powered Insights**: Advanced AI analytics and automation
