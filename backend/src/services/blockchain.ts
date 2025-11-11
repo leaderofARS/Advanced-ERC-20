@@ -1,8 +1,4 @@
-// @ts-nocheck
 import { ethers } from 'ethers';
-import { createPublicClient, createWalletClient, http, parseEther, formatEther } from 'viem';
-import { mainnet, sepolia, hardhat } from 'viem/chains';
-import { privateKeyToAccount } from 'viem/accounts';
 import { logger } from '@/utils/logger';
 import { prisma } from '@/config/database';
 import { EventEmitter } from 'events';
@@ -63,8 +59,7 @@ const ADVANCED_ERC20_ABI = [
 
 class BlockchainService extends EventEmitter {
   private provider: ethers.Provider;
-  private publicClient: any;
-  private walletClient: any;
+  private wallet?: ethers.Wallet;
   private contract: ethers.Contract;
   private contractAddress: string;
   private isInitialized = false;
@@ -80,27 +75,16 @@ class BlockchainService extends EventEmitter {
       const rpcUrl = process.env.RPC_URL || 'http://localhost:8545';
       this.provider = new ethers.JsonRpcProvider(rpcUrl);
 
-      // Initialize viem clients
-      const chain = this.getChain();
-      this.publicClient = createPublicClient({
-        chain,
-        transport: http(rpcUrl)
-      });
-
+      // Initialize wallet if private key is provided
       if (process.env.PRIVATE_KEY) {
-        const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`);
-        this.walletClient = createWalletClient({
-          account,
-          chain,
-          transport: http(rpcUrl)
-        });
+        this.wallet = new ethers.Wallet(process.env.PRIVATE_KEY, this.provider);
       }
 
       // Initialize contract
       this.contract = new ethers.Contract(
         this.contractAddress,
         ADVANCED_ERC20_ABI,
-        this.provider
+        this.wallet || this.provider
       );
 
       // Start event listeners
@@ -118,15 +102,7 @@ class BlockchainService extends EventEmitter {
     }
   }
 
-  private getChain() {
-    const chainId = parseInt(process.env.CHAIN_ID || '31337');
-    switch (chainId) {
-      case 1: return mainnet;
-      case 11155111: return sepolia;
-      case 31337: return hardhat;
-      default: return hardhat;
-    }
-  }
+
 
   private startEventListeners() {
     // Transfer events
@@ -182,7 +158,7 @@ class BlockchainService extends EventEmitter {
         hash: event.transactionHash,
         from,
         to,
-        amount: formatEther(value),
+        amount: ethers.formatEther(value),
         type: 'TRANSFER',
         status: 'CONFIRMED',
         blockNumber: BigInt(event.blockNumber),
@@ -201,11 +177,11 @@ class BlockchainService extends EventEmitter {
       transaction,
       from,
       to,
-      amount: formatEther(value)
+      amount: ethers.formatEther(value)
     });
 
     // Update user analytics
-    await this.updateUserAnalytics(from, to, formatEther(value));
+    await this.updateUserAnalytics(from, to, ethers.formatEther(value));
   }
 
   private async handleMintEvent(to: string, amount: bigint, event: any) {
@@ -214,7 +190,7 @@ class BlockchainService extends EventEmitter {
         hash: event.transactionHash,
         from: '0x0000000000000000000000000000000000000000',
         to,
-        amount: formatEther(amount),
+        amount: ethers.formatEther(amount),
         type: 'MINT',
         status: 'CONFIRMED',
         blockNumber: BigInt(event.blockNumber),
@@ -229,7 +205,7 @@ class BlockchainService extends EventEmitter {
       type: 'MINT',
       transaction,
       to,
-      amount: formatEther(amount)
+      amount: ethers.formatEther(amount)
     });
   }
 
@@ -239,7 +215,7 @@ class BlockchainService extends EventEmitter {
         hash: event.transactionHash,
         from,
         to: '0x0000000000000000000000000000000000000000',
-        amount: formatEther(amount),
+        amount: ethers.formatEther(amount),
         type: 'BURN',
         status: 'CONFIRMED',
         blockNumber: BigInt(event.blockNumber),
@@ -254,7 +230,7 @@ class BlockchainService extends EventEmitter {
       type: 'BURN',
       transaction,
       from,
-      amount: formatEther(amount)
+      amount: ethers.formatEther(amount)
     });
   }
 
@@ -290,7 +266,7 @@ class BlockchainService extends EventEmitter {
         proposalId: proposalId.toString(),
         voter,
         support,
-        weight: formatEther(weight)
+        weight: ethers.formatEther(weight)
       }
     });
 
@@ -323,18 +299,26 @@ class BlockchainService extends EventEmitter {
       proposalId: proposalId.toString(),
       voter,
       support,
-      weight: formatEther(weight)
+      weight: ethers.formatEther(weight)
     });
   }
 
   private async updateUserAnalytics(from: string, to: string, amount: string) {
     // Update sender analytics
     if (from !== '0x0000000000000000000000000000000000000000') {
+      const existing = await prisma.userAnalytics.findUnique({
+        where: { userId: from }
+      });
+      
+      const newVolume = existing 
+        ? (parseFloat(existing.totalVolume) + parseFloat(amount)).toString()
+        : amount;
+      
       await prisma.userAnalytics.upsert({
         where: { userId: from },
         update: {
           totalTransactions: { increment: 1 },
-          totalVolume: { increment: parseFloat(amount) },
+          totalVolume: newVolume,
           lastTransaction: new Date()
         },
         create: {
@@ -393,9 +377,9 @@ class BlockchainService extends EventEmitter {
 
       await prisma.tokenMetrics.create({
         data: {
-          totalSupply: formatEther(totalSupply),
-          circulatingSupply: formatEther(totalSupply - burnedTokens),
-          burnedTokens: formatEther(burnedTokens),
+          totalSupply: ethers.formatEther(totalSupply),
+          circulatingSupply: ethers.formatEther(totalSupply - burnedTokens),
+          burnedTokens: ethers.formatEther(burnedTokens),
           holders,
           transfers24h,
           volume24h
@@ -403,7 +387,7 @@ class BlockchainService extends EventEmitter {
       });
 
       this.emit('metrics', {
-        totalSupply: formatEther(totalSupply),
+        totalSupply: ethers.formatEther(totalSupply),
         holders,
         transfers24h,
         volume24h
@@ -433,22 +417,32 @@ class BlockchainService extends EventEmitter {
 
   private async getVolume24h(): Promise<string> {
     const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
-    const result = await prisma.transaction.aggregate({
+    const transactions = await prisma.transaction.findMany({
       where: {
         type: 'TRANSFER',
         createdAt: { gte: yesterday }
       },
-      _sum: { amount: true }
+      select: { amount: true }
     });
-    return result._sum.amount || '0';
+    
+    const total = transactions.reduce((sum, tx) => {
+      return sum + parseFloat(tx.amount || '0');
+    }, 0);
+    
+    return total.toString();
   }
 
   private async getBurnedTokens(): Promise<bigint> {
-    const result = await prisma.transaction.aggregate({
+    const transactions = await prisma.transaction.findMany({
       where: { type: 'BURN' },
-      _sum: { amount: true }
+      select: { amount: true }
     });
-    return parseEther(result._sum.amount || '0');
+    
+    const total = transactions.reduce((sum, tx) => {
+      return sum + parseFloat(tx.amount || '0');
+    }, 0);
+    
+    return ethers.parseEther(total.toString());
   }
 
   // Public API methods
@@ -464,14 +458,14 @@ class BlockchainService extends EventEmitter {
       name,
       symbol,
       decimals,
-      totalSupply: formatEther(totalSupply),
+      totalSupply: ethers.formatEther(totalSupply),
       address: this.contractAddress
     };
   }
 
   async getBalance(address: string): Promise<string> {
     const balance = await this.contract.balanceOf(address);
-    return formatEther(balance);
+    return ethers.formatEther(balance);
   }
 
   async isContract(): Promise<boolean> {
@@ -497,3 +491,4 @@ export const blockchainService = new BlockchainService();
 export async function initializeBlockchainService() {
   await blockchainService.initialize();
 }
+

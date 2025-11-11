@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Router } from 'express';
 import { prisma } from '@/config/database';
 import { blockchainService } from '@/services/blockchain';
@@ -51,12 +50,12 @@ router.get('/metrics', async (req, res) => {
 });
 
 // Get historical metrics
-router.get('/metrics/history', validateRequest({
+router.get('/metrics/history', validateRequest(Joi.object({
   query: Joi.object({
     timeframe: Joi.string().valid('1h', '24h', '7d', '30d', '1y').default('24h'),
     interval: Joi.string().valid('1m', '5m', '15m', '1h', '1d').optional()
   })
-}), async (req, res) => {
+})), async (req, res) => {
   try {
     const { timeframe, interval } = req.query;
     
@@ -168,12 +167,12 @@ router.get('/holders', async (req, res) => {
 });
 
 // Get transaction analytics
-router.get('/transactions', validateRequest({
+router.get('/transactions', validateRequest(Joi.object({
   query: Joi.object({
     timeframe: Joi.string().valid('1h', '24h', '7d', '30d').default('24h'),
     type: Joi.string().valid('TRANSFER', 'MINT', 'BURN', 'APPROVE').optional()
   })
-}), async (req, res) => {
+})), async (req, res) => {
   try {
     const { timeframe, type } = req.query;
     
@@ -194,15 +193,11 @@ router.get('/transactions', validateRequest({
       whereClause.type = type;
     }
 
-    const [transactions, totalVolume, uniqueUsers] = await Promise.all([
+    const [transactions, uniqueUsers] = await Promise.all([
       prisma.transaction.findMany({
         where: whereClause,
         orderBy: { createdAt: 'desc' },
         take: 100
-      }),
-      prisma.transaction.aggregate({
-        where: whereClause,
-        _sum: { amount: true }
       }),
       prisma.transaction.groupBy({
         by: ['from'],
@@ -210,11 +205,16 @@ router.get('/transactions', validateRequest({
       })
     ]);
 
+    // Calculate total volume manually since amount is a string
+    const totalVolume = transactions.reduce((sum, tx) => {
+      return sum + parseFloat(tx.amount || '0');
+    }, 0);
+
     res.json({
       success: true,
       data: {
         transactions,
-        totalVolume: totalVolume._sum.amount || '0',
+        totalVolume: totalVolume.toString(),
         uniqueUsers: uniqueUsers.length,
         timeframe
       }
@@ -241,14 +241,19 @@ async function getHoldersCount(): Promise<number> {
 
 async function getVolume24h(): Promise<string> {
   const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
-  const result = await prisma.transaction.aggregate({
+  const transactions = await prisma.transaction.findMany({
     where: {
       type: 'TRANSFER',
       createdAt: { gte: yesterday }
     },
-    _sum: { amount: true }
+    select: { amount: true }
   });
-  return result._sum.amount || '0';
+  
+  const total = transactions.reduce((sum, tx) => {
+    return sum + parseFloat(tx.amount || '0');
+  }, 0);
+  
+  return total.toString();
 }
 
 async function getTransactions24h(): Promise<number> {
