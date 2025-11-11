@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
-import Particles from '@/components/ui/Particles';
+import ParticlesBackground from '@/components/ui/ParticlesBackground';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -38,28 +38,14 @@ export default function RootLayout({
         <ErrorBoundary>
           <Providers>
             {/* Animated Particles Background */}
-            <div className="fixed inset-0 pointer-events-none z-0">
-              <Particles
-                particleColors={['#3b82f6', '#60a5fa', '#93c5fd']}
-                particleCount={150}
-                particleSpread={12}
-                speed={0.05}
-                particleBaseSize={80}
-                moveParticlesOnHover={true}
-                particleHoverFactor={0.5}
-                alphaParticles={true}
-                disableRotation={false}
-                sizeRandomness={0.8}
-                cameraDistance={18}
-              />
-            </div>
+            <ParticlesBackground />
 
             {/* Background Effects */}
-            <div className="fixed inset-0 cyber-grid opacity-10 pointer-events-none z-0" />
-            <div className="fixed inset-0 matrix-rain pointer-events-none z-0" />
+            <div className="fixed inset-0 cyber-grid opacity-10 pointer-events-none" style={{ zIndex: 1 }} />
+            <div className="fixed inset-0 matrix-rain pointer-events-none" style={{ zIndex: 1 }} />
             
             {/* Main Content */}
-            <div className="relative z-10 min-h-screen">
+            <div className="relative min-h-screen" style={{ zIndex: 10 }}>
               {children}
             </div>
           </Providers>
