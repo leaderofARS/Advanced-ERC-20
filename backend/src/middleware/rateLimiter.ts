@@ -14,7 +14,7 @@ export async function rateLimiterMiddleware(
   req: Request,
   res: Response,
   next: NextFunction
-) {
+): Promise<void> {
   try {
     const key = req.ip || 'unknown';
     await rateLimiter.consume(key);
@@ -37,4 +37,5 @@ export async function rateLimiterMiddleware(
   }
 }
 
+export { rateLimiterMiddleware as rateLimiter };
 export default rateLimiterMiddleware;

@@ -13,12 +13,13 @@ export async function authenticate(
   req: AuthRequest,
   res: Response,
   next: NextFunction
-) {
+): Promise<void> {
   try {
     const token = req.headers.authorization?.split(' ')[1];
     
     if (!token) {
-      return res.status(401).json({ error: 'No token provided' });
+      res.status(401).json({ error: 'No token provided' });
+      return;
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret') as any;
@@ -26,8 +27,9 @@ export async function authenticate(
     next();
   } catch (error) {
     logger.error('Authentication error:', error);
-    return res.status(401).json({ error: 'Invalid token' });
+    res.status(401).json({ error: 'Invalid token' });
   }
 }
 
+export const authenticateToken = authenticate;
 export default authenticate;

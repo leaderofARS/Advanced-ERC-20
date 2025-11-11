@@ -3,7 +3,7 @@ import Joi from 'joi';
 import { logger } from '@/utils/logger';
 
 export function validate(schema: Joi.ObjectSchema) {
-  return (req: Request, res: Response, next: NextFunction) => {
+  return (req: Request, res: Response, next: NextFunction): void => {
     const { error } = schema.validate(req.body, { abortEarly: false });
     
     if (error) {
@@ -14,15 +14,17 @@ export function validate(schema: Joi.ObjectSchema) {
       
       logger.warn('Validation error:', { errors, body: req.body });
       
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         error: 'Validation failed',
         details: errors
       });
+      return;
     }
     
     next();
   };
 }
 
+export const validateRequest = validate;
 export default validate;
