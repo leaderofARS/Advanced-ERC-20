@@ -13,7 +13,7 @@
     "build:all": "npm run build:contracts && npm run build:backend && npm run build:frontend",
     "build:contracts": "hardhat compile",
     "build:backend": "cd backend && npm install && npm run build",
-    "build:frontend": "cd frontend && npm run build",
+    "build:frontend": "cd frontend && npm install && npm run build",
     "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
     "start:backend": "cd backend && npm run start",
     "start:frontend": "cd frontend && npm run start",
