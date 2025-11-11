@@ -3,7 +3,6 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
-import SimpleParticles from '@/components/ui/SimpleParticles';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -37,15 +36,12 @@ export default function RootLayout({
       <body className={`${inter.className} bg-secondary-950 text-white min-h-screen antialiased`}>
         <ErrorBoundary>
           <Providers>
-            {/* Animated Particles Background */}
-            <SimpleParticles />
-
             {/* Background Effects */}
-            <div className="fixed inset-0 cyber-grid opacity-10 pointer-events-none" style={{ zIndex: 1 }} />
-            <div className="fixed inset-0 matrix-rain pointer-events-none" style={{ zIndex: 1 }} />
+            <div className="fixed inset-0 cyber-grid opacity-20 pointer-events-none" />
+            <div className="fixed inset-0 matrix-rain pointer-events-none" />
             
             {/* Main Content */}
-            <div className="relative min-h-screen" style={{ zIndex: 10 }}>
+            <div className="relative z-10 min-h-screen">
               {children}
             </div>
           </Providers>
