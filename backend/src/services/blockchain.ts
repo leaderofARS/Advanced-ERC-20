@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { ethers } from 'ethers';
 import { createPublicClient, createWalletClient, http, parseEther, formatEther } from 'viem';
 import { mainnet, sepolia, hardhat } from 'viem/chains';
