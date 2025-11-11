@@ -5,7 +5,7 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc && tsc-alias",
+    "build": "prisma generate && tsc && tsc-alias",
     "start": "node dist/server.js",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -39,7 +39,6 @@
     "rate-limiter-flexible": "^4.0.1",
     "redis": "^4.6.10",
     "socket.io": "^4.7.4",
-    "viem": "^2.38.6",
     "winston": "^3.11.0",
     "ws": "^8.14.2"
   },
